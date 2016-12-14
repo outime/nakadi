@@ -36,10 +36,13 @@ public class RepositoriesConfig {
     }
 
     @Bean
-    public EventTypeCache eventTypeCache(final ZooKeeperHolder zooKeeperHolder,
-                                         @DB final EventTypeRepository eventTypeRepository)
-    {
-        final CuratorFramework client = zooKeeperHolder.get();
+    public EventTypeCache eventTypeCacheInternal(final ZooKeeperHolder zooKeeperHolder,
+                                                 @DB final EventTypeRepository eventTypeRepository){
+        return eventTypeCacheInternal(zooKeeperHolder.get(), eventTypeRepository);
+    }
+
+    public static EventTypeCache eventTypeCacheInternal(
+            final CuratorFramework client, final EventTypeRepository eventTypeRepository) {
         ValidationStrategy.register(EventBodyMustRespectSchema.NAME, new EventBodyMustRespectSchema());
         ValidationStrategy.register(EventMetadataValidationStrategy.NAME, new EventMetadataValidationStrategy());
 
